@@ -10,6 +10,7 @@ should be running at once for full operation. Further instructions are available
 - [Vehicles API](vehicles-api/README.md)
 - [Pricing Service](pricing-service/README.md)
 - [Boogle Maps](boogle-maps/README.md)
+- [Eureka Server](eureka/README.md)
 
 ## Dependencies
 
