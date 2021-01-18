@@ -12,9 +12,7 @@ This module is for the Eureka Server and not the microservice client.
 ## Dependencies:
 - Config Client for ```spring-cloud-starter-config```
 - Eureka Server ```spring-cloud-netflix-eureka-server```
-
-  Additionally, the below additional dependency needs to be added in pom.xml
-to get Eureka server up and running: 
+- JAXB: add the below additional dependency in ***pom.xml*** to get Eureka server up and running using JAXB: 
 ```
     <dependency>
        <groupId>javax.xml.bind</groupId>
@@ -23,7 +21,7 @@ to get Eureka server up and running:
     </dependency>
 ```
 
-  Add additional configurations to application.properties as:
+  Add additional configurations to ***application.properties*** as:
 ```
 spring.application.name=eureka-server
 server.port=8761
