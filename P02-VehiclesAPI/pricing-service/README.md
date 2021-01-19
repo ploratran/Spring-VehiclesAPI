@@ -7,7 +7,7 @@ input. In this project, you will convert it to a microservice.
 
 ## Features
 
-- REST WebService integrated with Spring Boot
+- REST WebService integrated with Spring Boot with Spring Data REST
 
 ## Instructions
 
