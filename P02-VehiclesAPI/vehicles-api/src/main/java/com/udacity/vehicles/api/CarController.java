@@ -88,10 +88,10 @@ class CarController {
          *   Update the first line as part of the above implementing.
          */
         // use .save() from Car Service to save the input car:
-        Car saveCar = this.carService.save(car);
+        car = this.carService.save(car);
 
         // Use the `assembler` on that saved car and return as part of the response:
-        Resource<Car> resource = assembler.toResource(saveCar);
+        Resource<Car> resource = assembler.toResource(car);
         return ResponseEntity.created(new URI(resource.getId().expand().getHref())).body(resource);
     }
 
@@ -114,9 +114,9 @@ class CarController {
         car.setId(id);
 
         // Save the car using the `save` method from the Car service:
-        Car saveCar = this.carService.save(car);
+        this.carService.save(car);
 
-        Resource<Car> resource = assembler.toResource(saveCar);
+        Resource<Car> resource = assembler.toResource(car);
         return ResponseEntity.ok(resource);
     }
 
