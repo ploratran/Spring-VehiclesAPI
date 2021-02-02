@@ -3,6 +3,14 @@
 A REST API to maintain vehicle data and to provide a complete
 view of vehicle details including price and address (obtained from the location and pricing services).
 
+## Table of Contents
+1. [Features](#features)
+2. [How to turn this microservice into a Eureka client](#how-to-turn-this-microservice-into-a-eureka-client)
+3. [Instructions](#instructions)
+4. [Operations](#operations)
+5. [Swagger Documentation](#swagger-documentation)
+6. [Classes Explanations](#classes-explanations)
+
 ## Features
 
 - REST API exploring the main HTTP verbs and features
@@ -154,6 +162,61 @@ the Vehicle information to be presented
 
 `DELETE` `/cars/{id}`
 
+## Swagger Documentation
+
+### Setup: 
+1. In ```pom.xml``` file, add Swagger UI and Swagger 2 dependencies:
+```
+<dependency>
+    <groupId>io.springfox</groupId>
+    <artifactId>springfox-swagger-ui</artifactId>
+    <version>2.9.2</version>
+</dependency>
+
+<dependency>
+    <groupId>io.springfox</groupId>
+    <artifactId>springfox-swagger2</artifactId>
+    <version>2.9.2</version>
+    <scope>compile</scope>
+</dependency>
+```
+2. Make a new folder called ```config``` with a new class called ```SwaggerConfig.java```
+
+3. Integrate Swagger into existing spring boot project using Docket bean with custom information using ApiInfo by adding: 
+```
+@Bean
+public Docket api() {
+   return new Docket(DocumentationType.SWAGGER_2)
+         .select()
+         .apis(RequestHandlerSelectors.any())
+         .paths(PathSelectors.any())
+         .build()
+         .useDefaultResponseMessages(false); 
+}
+
+private ApiInfo apiInfo() {
+  return new ApiInfo(
+        "Vehicles API",
+        "This API contains information about vehicles with price and location.",
+        "1.0",
+        "http://localhost/8080/cars",
+        new Contact("Phuong Tran", "www.example.com", "myeaddress@company.com"),
+        "License of API", "API license URL", Collections.emptyList());
+  }
+```
+**Reference:** https://www.baeldung.com/swagger-2-documentation-for-spring-rest-api
+
+4. Navigate to: ```localhost:8080/swagger-ui.html```. This window should appear on the browser: 
+![](swagger-ui.png)
+   
+5. In ```CarController.java class```, add custom response messages for status code of 400, 401, 500 by using @ApiResponses and @ApiResponse: 
+```
+@ApiResponses(value = {
+   @ApiResponse(code=400, message="This is a bad request. Please follow the API documentation for proper request."),
+   @ApiResponse(code=401, message="Due to security constraints, your access request cannot be authorized."),
+   @ApiResponse(code=500, message="The server is down. Please make sure that the Price and Maps microservices are running.")
+})
+```
 
 ## Classes Explanations: 
 
