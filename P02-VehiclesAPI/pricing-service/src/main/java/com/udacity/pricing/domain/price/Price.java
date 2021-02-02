@@ -19,8 +19,6 @@ public class Price {
     private String currency;
     private BigDecimal price;
 
-    // private Long vehicleId;
-
     // constructors:
     public Price() {
     }

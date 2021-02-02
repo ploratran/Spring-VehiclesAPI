@@ -1,8 +1,12 @@
 package com.udacity.boogle.maps;
 
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+
 /**
  * Declares a class to store an address, city, state and zip code.
+ * Note that the latitude and longitude are not stored here - they come from the Vehicles API.
  */
+
 public class Address {
 
     private String address;

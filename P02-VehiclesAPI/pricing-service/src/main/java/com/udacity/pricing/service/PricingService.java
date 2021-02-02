@@ -10,7 +10,9 @@ import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 
 /**
- * Implements the pricing service to get prices for each vehicle.
+ * Implements the pricing service to get prices for each vehicle
+ * It creates a mapping of random prices to IDs
+ * as well as the method (in our mock service here) to generate the random prices
  */
 public class PricingService {
 

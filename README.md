@@ -1,36 +1,54 @@
-## About this Repository
-This repository is related to the Java Web Developer (ND035), Course - **Web Services and APIs**
+# About this Repository
+This repository is related to the [Java Web Developer (ND035)](https://www.udacity.com/course/java-developer-nanodegree--nd035), Course - **Web Services and APIs**
 
 It contains the following folders:
 1. Exercise-Lesson2: Contains the classroom exercise
 2. P02-VehiclesAPI: This folder contains a project readme file that has the instructions to follow
 
->**Note**: Generally, you cannot clone a particular folder to your local system. Instead, you clone the *entire repository*, as explained below:
-
-### How to clone this repository
-#### Step 1 - Fork the repository
-Make a copy of this repository in your Github account. You can do so by clicking `Fork` on the top right corner of this repository. 
-<br>
-<br>
-
-#### Step 2
-Once a copy of the repository is forked to your Github account, you can copy the repository HTTP URL, such as `https://github.com/YOUR_ACCOUNT_NAME/nd035-C2-Web-Services-and-APIs-Exercises-and-Project-Starter.git`
+## Table of Contents
+1. [Project Introduction](#project-introduction)
+2. [Microservices](#microservices)
+5. [Endpoints](#endpoints)
+6. [How to use the app](#how-to-use-the-app)
+7. [App Structure](#app-structure)
+8. [Udacity Requirements](#udacity-requirements)
+10. [License](#license)
 
 
-Now, you will need to clone (download) the repository locally in your system. There are two ways to clone this repository locally (choose any one):
-1. **Download the repo using the command-line terminal**:
-You can run the following commands in your terminal (macOS/Linux)/Gitbash (Windows). In the first command, use the HTTPS URL copied in the step above. 
-```bash
-git clone https://github.com/udacity/nd035-C2-Web-Services-and-APIs-Exercises-and-Project-Starter.git
-cd nd035-C2-Web-Services-and-APIs-Exercises-and-Project-Starter
-```
+## Project Introduction: 
+In this project, you'll use your skills with Spring Boot, APIs, documentation, and testing to implement a Vehicles API that serves as an endpoint to track vehicle inventory. While the primary Vehicles API will perform CRUD operations (Create, Read, Update and Delete) related to vehicle details like make, model, color, etc., it will need to consume data from other APIs (Boogle Maps and Pricing Service) as well regarding location and pricing data. You will implement a RESTful API for the Vehicles API, as well as converting a Pricing Service API to a microservice. 
 
+By the end of this project, you'll have an application that can communicate with other services and be able to be viewed and used through Swagger-based API documentation.
 
-2. **Clone directly in your IntelliJ IDE**: 
-IntelliJ provides VCS (Version Control System) menu to import a Github repository directly into your IntelliJ IDE. You can even perform all standard operations within your IDE, such as, add, commit, push, pull, merge, switch branch, etc. For more info, refer to the blog [Clone a Project from GitHub](https://blog.jetbrains.com/idea/2020/10/clone-a-project-from-github/), or [Instructions to Importing a project ](https://www.jetbrains.com/help/idea/import-project-or-module-wizard.html)
+## MicroServices: 
+1. [Boogle Maps](P02-VehiclesAPI/boogle-maps)
+2. [Eureka Server](P02-VehiclesAPI/eureka)
+3. [Pricing Service](P02-VehiclesAPI/pricing-service)
+4. [Vehicle API](P02-VehiclesAPI/vehicles-api)
 
->**Note** - If the imported project is not shown as a Maven project, simply right-click on the `pom.xml` file, and choose to add it as a Maven project.
+## Endpoints: 
+| Microservice    | Port |
+| --------------- | ---- |
+| Boogle Maps     | 9191 |
+| Eureka Server   | 8761 |
+| Pricing Service | 8082 |
+| Vehicle API     | 8080 |
+| Swagger         | 8080 |
 
+## How to use the app: 
+The Boogle Maps, Pricing Service, Vehicles API and Eureka Server must all be running for all operations to perform correctly, although they should be able to launch on their own.
+
+In seperate windows, use the below commands: 
+
+```$ mvn clean package``` (Run this in each directory containing the separate applications)
+
+* Boogle Maps ```$ java -jar target/boogle-maps-0.0.1-SNAPSHOT.jar```
+
+* Pricing Service: ```$ java -jar target/pricing-service-0.0.1-SNAPSHOT.jar```
+
+* Vehicles API: ```$ java -jar target/vehicles-api-0.0.1-SNAPSHOT.jar```
+
+* Swagger API open on browser at: ```http://localhost:8080/swagger-ui.html```
 
 ## License
 [License](LICENSE.txt)
