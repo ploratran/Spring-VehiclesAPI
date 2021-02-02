@@ -67,7 +67,11 @@ class CarController {
          * TODO: Use the `assembler` on that car and return the resulting output.
          *   Update the first line as part of the above implementing.
          */
-        return assembler.toResource(new Car());
+        // Use the `findById` method from the Car Service to get car information:
+        Car car = this.carService.findById(id);
+
+        // Use the `assembler` on that car and return the resulting output:
+        return assembler.toResource(car);
     }
 
     /**
@@ -84,10 +88,10 @@ class CarController {
          *   Update the first line as part of the above implementing.
          */
         // use .save() from Car Service to save the input car:
-        car = this.carService.save(car);
+        Car saveCar = this.carService.save(car);
 
         // Use the `assembler` on that saved car and return as part of the response:
-        Resource<Car> resource = assembler.toResource(car);
+        Resource<Car> resource = assembler.toResource(saveCar);
         return ResponseEntity.created(new URI(resource.getId().expand().getHref())).body(resource);
     }
 
@@ -119,6 +123,8 @@ class CarController {
         /**
          * TODO: Use the Car Service to delete the requested vehicle.
          */
+
+        this.carService.delete(id);
         return ResponseEntity.noContent().build();
     }
 }

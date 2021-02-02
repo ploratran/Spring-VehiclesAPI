@@ -5,6 +5,8 @@ import com.udacity.vehicles.client.prices.PriceClient;
 import com.udacity.vehicles.domain.car.Car;
 import com.udacity.vehicles.domain.car.CarRepository;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 /**
@@ -49,7 +51,8 @@ public class CarService {
          *   If it does not exist, throw a CarNotFoundException
          *   Remove the below code as part of your implementation.
          */
-        Car car = new Car();
+        // Car car = new Car();
+        Car car = this.repository.findById(id).orElseThrow(CarNotFoundException::new);
 
         /**
          * TODO: Use the Pricing Web client you create in `VehiclesApiApplication`
@@ -58,7 +61,7 @@ public class CarService {
          * Note: The car class file uses @transient, meaning you will need to call
          *   the pricing service each time to get the price.
          */
-
+        car.setPrice(this.priceClient.getPrice(id));
 
         /**
          * TODO: Use the Maps Web client you create in `VehiclesApiApplication`
@@ -68,7 +71,7 @@ public class CarService {
          * Note: The Location class file also uses @transient for the address,
          * meaning the Maps service needs to be called each time for the address.
          */
-
+        car.setLocation(this.mapsClient.getAddress(car.getLocation()));
 
         return car;
     }
@@ -101,11 +104,11 @@ public class CarService {
          *   If it does not exist, throw a CarNotFoundException
          */
 
-
+        Car carToBeDeleted = this.repository.findById(id).orElseThrow(CarNotFoundException::new);
         /**
          * TODO: Delete the car from the repository.
          */
 
-
+        this.repository.delete(carToBeDeleted);
     }
 }
