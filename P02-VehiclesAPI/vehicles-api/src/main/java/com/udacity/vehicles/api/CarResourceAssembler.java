@@ -9,6 +9,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 
 /**
  * Maps the CarController to the Car class using HATEOAS
+ * help return the API response
  */
 @Component
 public class CarResourceAssembler implements ResourceAssembler<Car, Resource<Car>> {

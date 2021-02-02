@@ -1,7 +1,7 @@
 # Vehicles API
 
 A REST API to maintain vehicle data and to provide a complete
-view of vehicle details including price and address.
+view of vehicle details including price and address (obtained from the location and pricing services).
 
 ## Features
 
@@ -13,13 +13,61 @@ view of vehicle details including price and address.
 - MVC Test
 - Automatic model mapping
 
+## How to turn this microservice into a Eureka client: 
+1. Ensure that both Eureka Discovery Client and Cloud Config dependencies are included: 
+```
+   <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-config</artifactId>
+    </dependency>
+```
+
+2. Add this dependency to dependency management:
+```
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-parent</artifactId>
+                <version>Greenwich.RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+``` 
+
+3. Add ```@EnableEurekaClient``` annotation in main Spring application class.
+
+4. Configure name for this microservice application and server port **8082** and eureka client service url as:
+
+```
+# define name of microservice app:
+spring.application.name=pricing-service
+# port of this microservice server:
+server.port=8082
+# add Eureka Client service URL:
+eureka.client.serviceUrl.defaultZone=http://localhost:8761/eureka/
+eureka.client.service-url.default-zone=http://localhost:8761/eureka/
+
+eureka.instance.prefer-ip-address=true
+```
+
+5. Ensure this microservice is registed with Eureka server by navigating to ```http://localhost:8761/```:
+
+![](vehicle-eureka-client.png)
+
 ## Instructions
 
-#### TODOs
+#### Udacity TODOs Requirements: 
 
-- Implement the `TODOs` within the `CarService.java` and `CarController.java`  files
-- Add additional tests to the `CarControllerTest.java` file based on the `TODOs`
-- Implement API documentation using Swagger
+- [x] Implement the `TODOs` within the `CarService.java` and `CarController.java`  files
+- [x] Add additional tests to the `CarControllerTest.java` file based on the `TODOs`
+- [x] Implement API documentation using Swagger
 
 #### Run the Code
 
@@ -27,13 +75,9 @@ To properly run this application you need to start the Orders API and
 the Service API first.
 
 
-```
-$ mvn clean package
-```
+```$ mvn clean package```
 
-```
-$ java -jar target/vehicles-api-0.0.1-SNAPSHOT.jar
-```
+```$ java -jar target/vehicles-api-0.0.1-SNAPSHOT.jar```
 
 Import it in your favorite IDE as a Maven Project.
 
@@ -109,3 +153,82 @@ the Vehicle information to be presented
 ### Delete a Vehicle
 
 `DELETE` `/cars/{id}`
+
+
+## Classes Explanations: 
+
+### ```vehicles```
+
+#### VehiclesApiApplication
+This launches the Vehicles API as a Spring Boot application. Additionally, it initializes a few car manufacturers to place in the ManufacturerRepository, as well as creating the 
+web clients to connect to the Maps and Pricing services.
+
+### ```vehicles.api```
+
+#### API Error
+Declares a few quick methods to return errors and other messages from the Vehicles API.
+
+#### CarController
+This is our actual REST controller for the application. This implements what happens when GET, POST, PUT and DELETE requests are received (using methods in the CarService), and how they are responded to (including formatting with CarResourceAssembler). You will implement these methods in your code.
+
+#### CarResourceAssembler
+This helps mapping the CarController to the Car class to help return the API response.
+
+#### ErrorController
+This helps to handle any invalid arguments fed to the API.
+
+### ```vehicles.client.maps```
+
+#### Address
+Very similar to the Address file for boogle-maps, this declares a class for use with the MapsClient.
+
+#### MapsClient
+Handles the format of a GET request to the boogle-maps WebClient to get location data.
+
+### ```vehicles.client.prices```
+
+#### Price
+Very similar to the Price file for pricing-service, this declares a class for use with the PriceClient.
+
+#### PriceClient
+Handles the format of a GET request to the pricing-service WebClient to get pricing data.
+
+### ```vehicles.domain```
+
+#### Condition
+This enumerates the available values for the condition of a car (New or Used).
+
+#### Location
+This declares information about the location of a vehicle. This is not the exact same as the Address class used by boogle-maps - it's primary use is related to the storage of latitude and longitude values. Because the data, such as address, gathered from boogle-maps is annotated as @Transient, this data is not stored until the next time boogle-maps is called.
+
+### ```vehicles.domain.car```
+
+#### Car
+This declares certain information about a given vehicle, mostly that more about the car entry itself (such as CreatedAt). Note that a separate class, Details, also stores additional details about the car that is more specific to things like make, color and model. Note that similar to Location with data like address, this uses a @Transient tag with price, meaning the Pricing Service must be called each time a price is desired.
+
+#### CarRepository
+This repository provide a type of data persistence while the web service runs, primarily related to vehicle information received in the CarService.
+
+#### Details
+Declares additional vehicle details, primarily about the car build itself, such as fuelType and mileage.
+
+### ```vehicles.domain.manufacturer```
+
+#### Manufacturer
+This declares the Manufacturer class, primarily just made of a ID code and name of manufacturer.
+
+#### ManufacturerRepository
+This repository provides a type of data persistence while the web service runs, primarily to store manufacturer information like that initialized in VehiclesApiApplication.
+
+### ```vehicles.domain```
+
+#### CarNotFoundException
+This creates a CarNotFoundException that can be thrown when an issue arises in the CarService
+
+#### CarService
+The Car Service does a lot of the legwork of the code. It can gather either the entire list of vehicles or just a single vehicle by ID (including calls to the maps and pricing web clients). It can also save updated vehicle information. Lastly, it can delete an existing car. All of these are called by the CarController based on queries to the REST API. You will implement most of these methods yourself.
+
+### ```test/../vehicles.api```
+
+#### CarControllerTest
+Here, the various methods performed by the CarController are performed by creating mock calls to the Vehicles API. You will implement some of these methods yourself for great practice in building your own tests.

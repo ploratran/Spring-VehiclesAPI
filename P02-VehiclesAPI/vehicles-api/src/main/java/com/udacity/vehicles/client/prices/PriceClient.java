@@ -7,6 +7,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 /**
  * Implements a class to interface with the Pricing Client for price data.
+ * Handles the format of a GET request to the pricing-service WebClient to get pricing data.
  */
 @Component
 public class PriceClient {

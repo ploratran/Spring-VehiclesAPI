@@ -1,7 +1,9 @@
 package com.udacity.vehicles.client.maps;
 
 /**
- * Declares a class to store an address, city, state and zip code.
+ * Declares a class to store an address, city, state and zip code
+ * for use with the MapsClient
+ * Very similar to the Address file for boogle-maps
  */
 public class Address {
 

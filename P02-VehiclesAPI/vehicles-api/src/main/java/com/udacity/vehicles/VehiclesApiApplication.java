@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -18,6 +19,7 @@ import org.springframework.web.reactive.function.client.WebClient;
  */
 @SpringBootApplication
 @EnableJpaAuditing
+@EnableEurekaClient
 public class VehiclesApiApplication {
 
     public static void main(String[] args) {
@@ -40,6 +42,10 @@ public class VehiclesApiApplication {
         };
     }
 
+    /**
+     * ModelMapper: maps objects by determining how 1 object model is mapped
+     * to another called DTO
+     * */
     @Bean
     public ModelMapper modelMapper() {
         return new ModelMapper();
@@ -64,5 +70,4 @@ public class VehiclesApiApplication {
     public WebClient webClientPricing(@Value("${pricing.endpoint}") String endpoint) {
         return WebClient.create(endpoint);
     }
-
 }

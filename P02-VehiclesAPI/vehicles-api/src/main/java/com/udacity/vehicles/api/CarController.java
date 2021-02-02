@@ -26,13 +26,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Implements a REST-based controller for the Vehicles API.
+ * implements what happens when GET, POST, PUT and DELETE requests are received
+ * (using methods in the CarService)
+ * and how they are responded to
+ * (including formatting with CarResourceAssembler)
  */
 @RestController
 @RequestMapping("/cars")
 class CarController {
 
     private final CarService carService;
-    private final CarResourceAssembler assembler;
+    private final CarResourceAssembler assembler; // return HATEOAS response
 
     CarController(CarService carService, CarResourceAssembler assembler) {
         this.carService = carService;
@@ -79,7 +83,11 @@ class CarController {
          * TODO: Use the `assembler` on that saved car and return as part of the response.
          *   Update the first line as part of the above implementing.
          */
-        Resource<Car> resource = assembler.toResource(new Car());
+        // use .save() from Car Service to save the input car:
+        car = this.carService.save(car);
+
+        // Use the `assembler` on that saved car and return as part of the response:
+        Resource<Car> resource = assembler.toResource(car);
         return ResponseEntity.created(new URI(resource.getId().expand().getHref())).body(resource);
     }
 

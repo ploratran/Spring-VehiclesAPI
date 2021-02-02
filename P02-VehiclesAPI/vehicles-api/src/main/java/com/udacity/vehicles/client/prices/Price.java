@@ -3,7 +3,8 @@ package com.udacity.vehicles.client.prices;
 import java.math.BigDecimal;
 
 /**
- * Represents the price of a given vehicle, including currency.
+ * Represents the price of a given vehicle, including currency
+ * declares a class for use with the PriceClient
  */
 public class Price {
 

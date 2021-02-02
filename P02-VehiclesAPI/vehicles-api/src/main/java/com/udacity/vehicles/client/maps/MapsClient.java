@@ -10,6 +10,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 /**
  * Implements a class to interface with the Maps Client for location data.
+ * Handles the format of a GET request to the boogle-maps WebClient
+ * to get location data.
  */
 @Component
 public class MapsClient {
@@ -19,8 +21,8 @@ public class MapsClient {
     private final WebClient client;
     private final ModelMapper mapper;
 
-    public MapsClient(WebClient maps,
-            ModelMapper mapper) {
+    // constructor:
+    public MapsClient(WebClient maps, ModelMapper mapper) {
         this.client = maps;
         this.mapper = mapper;
     }

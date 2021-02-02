@@ -1,26 +1,33 @@
 package com.udacity.vehicles.service;
 
+import com.udacity.vehicles.client.maps.MapsClient;
+import com.udacity.vehicles.client.prices.PriceClient;
 import com.udacity.vehicles.domain.car.Car;
 import com.udacity.vehicles.domain.car.CarRepository;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
 /**
- * Implements the car service create, read, update or delete
+ * Implements the car service create, read, update or delete (CRUD)
  * information about vehicles, as well as gather related
  * location and price data when desired.
+ * All of these are called by the CarController based on queries to the REST API.
  */
 @Service
 public class CarService {
 
     private final CarRepository repository;
+    private MapsClient mapsClient;
+    private PriceClient priceClient;
 
-    public CarService(CarRepository repository) {
+    public CarService(CarRepository repository, MapsClient mapClient, PriceClient priceClient) {
         /**
          * TODO: Add the Maps and Pricing Web Clients you create
          *   in `VehiclesApiApplication` as arguments and set them here.
          */
         this.repository = repository;
+        this.mapsClient = mapClient;
+        this.priceClient = priceClient;
     }
 
     /**

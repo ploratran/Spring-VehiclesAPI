@@ -19,6 +19,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * Declares the Car class, related variables and methods.
+ * This declares certain information about a given vehicle, mostly that more about the car entry itself (such as CreatedAt).
+ * Note that a separate class, Details, also stores additional details about the car that is more specific to things like make, color and model.
+ * Note that similar to Location with data like address,
+ * this uses a @Transient tag with price, meaning the Pricing Service must be called each time a price is desired.
  */
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -47,7 +51,7 @@ public class Car {
     private Location location = new Location(0d, 0d);
 
     @Transient
-    private String price;
+    private String price; // Price Service must be called each time price is desired
 
     public Long getId() {
         return id;
