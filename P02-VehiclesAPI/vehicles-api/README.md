@@ -9,7 +9,8 @@ view of vehicle details including price and address (obtained from the location 
 3. [Instructions](#instructions)
 4. [Operations](#operations)
 5. [Swagger Documentation](#swagger-documentation)
-6. [Classes Explanations](#classes-explanations)
+6. [Testing](#testing)
+7. [Classes Explanations](#classes-explanations)
 
 ## Features
 
@@ -217,6 +218,39 @@ private ApiInfo apiInfo() {
    @ApiResponse(code=500, message="The server is down. Please make sure that the Price and Maps microservices are running.")
 })
 ```
+
+## Testing: 
+Testing gives you confidence that your application is working when you make changes. First, unit test your small piece, then integrate your piece with the other system components to conduct integration testing.
+By adding Spring Boot Starter Test into ```pom.xml```, we will import both Spring Boot Test modules as well as JUnit, AssertJ, Hamcrest, etc. 
+```
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-test</artifactId>
+  <scope>test</scope>
+</dependency>
+```
+
+### Unit Testing REST APIs using JUnit, Mockito, Spring Test (or MockMVC): 
+
+* **JUnit:** popular unit <u>testing framework</u> that allows you to test individual units of source code. 
+* **Mockito:** a <u>mocking framework</u> which <u>provides data</u> for JUnit tests. 
+* **@MockBean:** works with Mockito library to <u>mock the dependent beans</u> like the <u>Service layer bean</u>
+* **@WebMvcTest:** an annotation used for <u>Controller layer</u> unit testing, often 1 controller at a time
+* **@Test** indicates a method is for <u>Unit Test</u>
+
+### Integration Testing: 
+**@SpringBootTest:**
+- indicates an <u>Integration Test</u> as it starts the full application contexts.
+- including the server and does not customize component scanning. 
+- look for main configuration class starting with @SpringBootApplication
+- 
+**@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)**: 
+- starts the server with a random port to avoid conflicts in a test environment.
+
+**@AutoConfigureMockMvc:**
+- inject Spring Mock MVC (or Spring Test)
+- simulates calling the code from the client the same as processing a real HTTP request
+
 
 ## Classes Explanations: 
 

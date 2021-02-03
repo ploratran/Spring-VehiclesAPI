@@ -24,31 +24,39 @@ import java.util.Collections;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 /**
  * Implements testing of the CarController class.
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@AutoConfigureMockMvc
+@RunWith(SpringRunner.class) // use SpringRunner of Junit to run test cases
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT) // useful for integration testing
+@AutoConfigureMockMvc // inject Spring Mock MVC (or Spring Test)
 @AutoConfigureJsonTesters
 public class CarControllerTest {
 
+    // simulate server port:
+    @LocalServerPort
+    private int port;
+
     @Autowired
-    private MockMvc mvc;
+    private MockMvc mvc; // MockMVC tests MVC Controllers without needing to start a full HTTP server
 
     @Autowired
     private JacksonTester<Car> json;
 
+    // @MockBean creates a Mockito mock of the Services which are dependencies for the Controller
     @MockBean
     private CarService carService;
 
@@ -63,8 +71,8 @@ public class CarControllerTest {
      */
     @Before
     public void setup() {
-        Car car = getCar();
-        car.setId(1L);
+        Car car = getCar(); // initialize a car
+        car.setId(1L); // set car id = 1
         given(carService.save(any())).willReturn(car);
         given(carService.findById(any())).willReturn(car);
         given(carService.list()).willReturn(Collections.singletonList(car));
@@ -76,10 +84,10 @@ public class CarControllerTest {
      */
     @Test
     public void createCar() throws Exception {
-        Car car = getCar();
+        Car car = getCar(); // initialize a car
         mvc.perform(
-                post(new URI("/cars"))
-                        .content(json.write(car).getJson())
+                post(new URI("/cars")) // do POST request to /cars
+                        .content(json.write(car).getJson()) // use JSON for request body
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isCreated());
@@ -96,7 +104,11 @@ public class CarControllerTest {
          *   the whole list of vehicles. This should utilize the car from `getCar()`
          *   below (the vehicle will be the first in the list).
          */
+        this.mvc.perform(get("/cars"))
+                .andExpect(status().isOk());
 
+        // verify the times the Mock bean of Car Service has been called once:
+        Mockito.verify(this.carService, times(1)).list();
     }
 
     /**
@@ -109,6 +121,11 @@ public class CarControllerTest {
          * TODO: Add a test to check that the `get` method works by calling
          *   a vehicle by ID. This should utilize the car from `getCar()` below.
          */
+
+        this.mvc.perform(get("/cars/1"))
+                .andExpect(status().isOk());
+
+        Mockito.verify(this.carService, times(1)).findById(1L);
     }
 
     /**
@@ -122,6 +139,10 @@ public class CarControllerTest {
          *   when the `delete` method is called from the Car Controller. This
          *   should utilize the car from `getCar()` below.
          */
+        this.mvc.perform(delete("/cars/1"))
+                .andExpect(status().isNoContent());
+
+        Mockito.verify(this.carService, times(1)).delete(1L);
     }
 
     /**
