@@ -7,6 +7,7 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -84,7 +85,7 @@ public class CarControllerTest {
      */
     @Test
     public void createCar() throws Exception {
-        Car car = getCar(); // initialize a car
+        Car car = getCar(); // initialize a car with data
         mvc.perform(
                 post(new URI("/cars")) // do POST request to /cars
                         .content(json.write(car).getJson()) // use JSON for request body
@@ -104,7 +105,9 @@ public class CarControllerTest {
          *   the whole list of vehicles. This should utilize the car from `getCar()`
          *   below (the vehicle will be the first in the list).
          */
-        this.mvc.perform(get("/cars"))
+        this.mvc.perform(get("/cars")
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
 
         // verify the times the Mock bean of Car Service has been called once:
@@ -122,7 +125,9 @@ public class CarControllerTest {
          *   a vehicle by ID. This should utilize the car from `getCar()` below.
          */
 
-        this.mvc.perform(get("/cars/1"))
+        this.mvc.perform(get("/cars/1")
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
 
         Mockito.verify(this.carService, times(1)).findById(1L);
@@ -139,10 +144,31 @@ public class CarControllerTest {
          *   when the `delete` method is called from the Car Controller. This
          *   should utilize the car from `getCar()` below.
          */
-        this.mvc.perform(delete("/cars/1"))
+        this.mvc.perform(delete("/cars/1")
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isNoContent());
 
         Mockito.verify(this.carService, times(1)).delete(1L);
+    }
+
+    /**
+     * EXTRA METHOD: Tests the deletion of a single car by ID.
+     * @throws Exception if the delete operation of a vehicle fails
+     */
+    @Test
+    public void updateCar() throws Exception {
+        /**
+         * TODO: Check whether a vehicle is updated when the put() method is called from the Car Controller.This
+         *   should utilize the car from `getCar()` below.
+         */
+        Car car = getCar(); // initialize a car with updated data
+        this.mvc.perform(
+                put(new URI("/cars/1")) // do PUT request to /cars/{id}
+                        .content(json.write(car).getJson()) // use JSON for request body
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .accept(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk());
     }
 
     /**

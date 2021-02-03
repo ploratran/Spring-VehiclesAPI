@@ -11,6 +11,7 @@ view of vehicle details including price and address (obtained from the location 
 5. [Swagger Documentation](#swagger-documentation)
 6. [Testing](#testing)
 7. [Classes Explanations](#classes-explanations)
+8. [H2 Database](#h2-database)
 
 ## Features
 
@@ -220,7 +221,7 @@ private ApiInfo apiInfo() {
 ```
 
 ## Testing: 
-Testing gives you confidence that your application is working when you make changes. First, unit test your small piece, then integrate your piece with the other system components to conduct integration testing.
+Testing gives you a confidence that your application is working when you make changes. First, unit test your small piece, then integrate your piece with the other system components to conduct integration testing.
 By adding Spring Boot Starter Test into ```pom.xml```, we will import both Spring Boot Test modules as well as JUnit, AssertJ, Hamcrest, etc. 
 ```
 <dependency>
@@ -251,6 +252,9 @@ By adding Spring Boot Starter Test into ```pom.xml```, we will import both Sprin
 - inject Spring Mock MVC (or Spring Test)
 - simulates calling the code from the client the same as processing a real HTTP request
 
+**Mockito.verify()**: 
+- used to test the number of times the <u>Mock method</u> has been called using **Mockito**
+- In this project, the Car Service has been mocked once (1 times), and the method inside the Service (such as list()) has been called. 
 
 ## Classes Explanations: 
 
@@ -329,3 +333,8 @@ The Car Service does a lot of the legwork of the code. It can gather either the 
 
 ### CarControllerTest
 Here, the various methods performed by the CarController are performed by creating mock calls to the Vehicles API. You will implement some of these methods yourself for great practice in building your own tests.
+
+## H2 Database: 
+
+Navigate to H2 Database at ```localhost:8080/h2``` as below, and click ```Connect```: 
+![](h2.png)

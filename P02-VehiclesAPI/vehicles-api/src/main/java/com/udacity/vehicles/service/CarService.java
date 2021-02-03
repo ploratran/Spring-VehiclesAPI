@@ -85,8 +85,9 @@ public class CarService {
         if (car.getId() != null) {
             return repository.findById(car.getId())
                     .map(carToBeUpdated -> {
-                        carToBeUpdated.setDetails(car.getDetails());
-                        carToBeUpdated.setLocation(car.getLocation());
+                        carToBeUpdated.setDetails(car.getDetails()); // update new Details
+                        carToBeUpdated.setLocation(car.getLocation()); // update new Location
+                        carToBeUpdated.setCondition(car.getCondition()); // update new Condition
                         return repository.save(carToBeUpdated);
                     }).orElseThrow(CarNotFoundException::new);
         }
